@@ -1,3 +1,33 @@
+
+
+## Generate Embeddings
+---
+This script **generate_node_embeddings.py** reads a CSV-based knowledge graph, takes a sample of nodes, and uses OpenAI’s `text-embedding-ada-002` model to generate embeddings for each node. The output is saved as a CSV file with the node ID, definition, and associated embedding vector.
+
+## Requirements
+
+- **Python 3.9+**
+- **OpenAI** (for embedding generation)
+- **pandas** (for data manipulation)
+- **tqdm** (for progress bars)
+- **tiktoken** (for token counting within the OpenAI model)
+- **An active OpenAI API key** (to authenticate requests)
+
+---
+
+## Conda Environment Setup
+
+Below are steps to create and activate a conda environment. We will install some packages using `conda` and the rest (like `openai` and `tiktoken`) using `pip`, since they may not be available on default conda channels.
+
+1. **Create a new environment** (e.g., `embed`):
+   ```bash
+   conda create -n embed python=3.9 pandas tqdm
+   ```
+2.	**Install required packages**
+   ```bash
+    pip install openai tiktoken
+   ```
+
 ## Processing of batchapi input and output
 ---
 This repository provides python scripts to prepare input to openAI batchapi and also to read the jsonl batch output and save it in a csv format.
