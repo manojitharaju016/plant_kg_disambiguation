@@ -33,7 +33,8 @@ nodes = nodes[['id', 'name', 'node_type','extracted_definition','generated_defin
 nodes.drop_duplicates(subset=['id'], keep='first', inplace=True)
 
 #take a subset of 100 nodes
-nodes = nodes.sample(100, random_state=42)
+#nodes = nodes.sample(100, random_state=42)
+
 # Function to generate embeddings for nodes
 def generate_embeddings(nodes_subset, nodes_file_name, api_key, max_tokens_per_batch=8192):
     openai.api_key = api_key  # Set your OpenAI API key
@@ -112,10 +113,10 @@ def generate_embeddings(nodes_subset, nodes_file_name, api_key, max_tokens_per_b
 
     # Convert embeddings to a DataFrame and save to CSV
     node_embedding_df = pd.DataFrame(node_embeddings)
-    node_embedding_df.to_csv(nodes_file_name, index=False)
-    #node_embedding_df.to_parquet(nodes_file_name, index=False,compression='zstd')
+    #node_embedding_df.to_csv(nodes_file_name, index=False)
+    node_embedding_df.to_parquet(nodes_file_name, index=False,compression='zstd')
     print(f"Embeddings saved to {nodes_file_name}")
 
     # Start generation
 
-generate_embeddings(nodes,"test_embeddings.csv","Enter your API key here.")
+generate_embeddings(nodes,"all_node_embeddings.parquet","Enter your API key here.")
