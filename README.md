@@ -30,7 +30,7 @@ Below are steps to create and activate a conda environment. We will install some
 
 ## Processing of batchapi input and output
 ---
-This repository provides python scripts to prepare input to openAI batchapi and also to read the jsonl batch output and save it in a csv format.
+This repository provides python scripts **gpt_input_jsonl_prep.py, convert_gpt_jsonl_tocsv.py** to prepare input to openAI batchapi and also to read the jsonl batch output response and save it in a csv format.
 
 ## Requirements
 
