@@ -147,4 +147,4 @@ df_sizes = multisect_kmeans(
 )
 wandb.finish()
 print('saving the final clusters...')
-df_sizes.to_parquet('multisect_kmeans_all_clusters_max_clust_300.parquet', engine='pyarrow',compression='zstd')
+df_sizes.to_parquet('multisect_kmeans_all_clusters_max_clust_30.parquet', engine='pyarrow',compression='zstd')
