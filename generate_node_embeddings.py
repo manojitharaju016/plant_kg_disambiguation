@@ -11,7 +11,17 @@ import tiktoken
 #read the connectome kg file
 print('Loading the knowledge graph. It may take a while...')
 df_kg = pd.read_csv('/Users/manojitharajula/Documents/PhD/Connectome/Entity_disambiguation/entityedgebasisall_dic.csv')
- 
+
+mapping_df = pd.read_csv("/home/mads/connectome/data/embeddings/type_embeddings/results/v2/label_remap_curated.csv")
+
+df_kg["source type original"] = df_kg["source type"].copy()
+df_kg["target type original"] = df_kg["target type"].copy()
+
+
+df_kg["source type"] = df_kg["source type"].map(mapping_df.set_index("id")["parent_node"]).fillna("other")
+df_kg["target type"] = df_kg["target type"].map(mapping_df.set_index("id")["parent_node"]).fillna("other")
+
+
 df_kg = df_kg.dropna(subset=['source','source type','target','target type'])
 source_nodes = df_kg[['source', 'source type','source_extracted_definition','source_generated_definition']]
 target_nodes = df_kg[['target', 'target type','target_extracted_definition','target_generated_definition']]
