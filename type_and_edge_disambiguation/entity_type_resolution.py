@@ -10,7 +10,7 @@ from openai import OpenAI
 
 
 
-with open("api_key.txt", "r") as f:
+with open("/home/mads/connectome/data/api_key.txt", "r") as f:
     api_key = f.read()
 
 def get_embedding_from_openai(text, model="text-embedding-ada-002"):
@@ -78,10 +78,10 @@ def get_top_10_similar_nodes(node_embedding, embedding_map_df):
 #def make_user_promts(row):
 #    return f'Input type: {row["id"]};  Top 10 similar types: {row["top_10_nodes"]}'
 print("loading embedding_map_df")
-embedding_map_df = pd.read_parquet("/home/mads/connectome/data/embeddings/type_embeddings/type_embeddings_20250311_151131.parquet")
+embedding_map_df = pd.read_parquet("/home/mads/connectome/data/embeddings/type_embeddings/output/type_embeddings_20250311_151131.parquet")
 embedding_map_df.columns = ["id", "embedding"]
 #define reference set as the top 1000 nodes by count
-reference_set = embedding_map_df["id"].head(30).tolist()
+reference_set = embedding_map_df["id"].head(30).tolist() # this gets the top 30 most common entity types
 reference_df = embedding_map_df[embedding_map_df["id"].isin(reference_set)]
 
 nodes_to_query = embedding_map_df[~embedding_map_df["id"].isin(reference_set)]

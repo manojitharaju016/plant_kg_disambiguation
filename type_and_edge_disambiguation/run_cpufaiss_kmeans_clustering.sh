@@ -1,4 +1,4 @@
-python edge_embeddings_cpufaiss_kmeans_elbow.py \
+python cpufaiss_kmeans_elbow_edges.py \
     --embeddings_path /home/mads/connectome/data/embeddings/edge_embeddings/output/edge_embeddings_20250319_123044.parquet \
     --output_path /home/mads/connectome/data/embeddings/edge_embeddings/clustering \
     --max_cluster_size 30 \
