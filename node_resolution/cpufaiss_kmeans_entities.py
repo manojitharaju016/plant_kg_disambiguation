@@ -10,7 +10,7 @@ import wandb
 
 # Load from the compressed Parquet file
 df_all_embeddings = pd.read_parquet(
-    'all_merged_node_embeddings.parquet',
+    'path/to/your/embeddings.parquet',  # Replace with your file path
     engine='pyarrow'
 )
 
@@ -21,10 +21,10 @@ embeddings = np.array(df_all_embeddings['embedding'].tolist(), dtype='float32')
 print("Embeddings shape:", embeddings.shape)  # Should be (N, 1536)
 
 
-
+# Initialize Weights & Biases
 wandb.init(
     project="kmeans_clustering",  # Replace with your project name
-    name="multisect_kmeans_sec_all_cpu_max_clust_800",   # Customize the run name
+    name="multisect_kmeans_sec_all_cpu_max_clust_30",   # Customize the run name
 )
 
 def multisect_kmeans(
@@ -40,6 +40,15 @@ def multisect_kmeans(
     have <= max_cluster_size points.
     Logs the maximum cluster size in the stack to Weights & Biases 
     at each iteration.
+    Args:
+        embeddings (np.ndarray): 2D array of shape (N, D) where N is the number of points and D is the dimensionality.
+        df_all_embeddings (pd.DataFrame): DataFrame containing the original embeddings and their metadata.
+        max_cluster_size (int): Maximum size of clusters before splitting.
+        k_split (int): Number of sub-clusters to create when splitting.
+        max_iter (int): Maximum number of iterations for KMeans.
+        random_state (int): Random seed for reproducibility.
+    Returns:
+        pd.DataFrame: DataFrame containing the final clusters and their sizes.
     """
 
     # ---------------------------------------------------------------------
@@ -147,4 +156,5 @@ df_sizes = multisect_kmeans(
 )
 wandb.finish()
 print('saving the final clusters...')
-df_sizes.to_parquet('multisect_kmeans_all_clusters_max_clust_30.parquet', engine='pyarrow',compression='zstd')
+df_sizes.to_parquet('multisect_kmeans_all_clusters_max_clust_30.parquet', engine='pyarrow',compression='zstd') #Customize the final file name
+print('saved the final clusters!')

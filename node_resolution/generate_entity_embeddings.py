@@ -10,9 +10,10 @@ import tiktoken
 #read plant knowledge graph
 #read the connectome kg file
 print('Loading the knowledge graph. It may take a while...')
-df_kg = pd.read_csv('/Users/manojitharajula/Documents/PhD/Connectome/Entity_disambiguation/entityedgebasisall_dic.csv')
+df_kg = pd.read_csv('/path/to/your/knowledge_graph.csv')
 
-mapping_df = pd.read_csv("/home/mads/connectome/data/embeddings/type_embeddings/results/v2/label_remap_curated.csv")
+#read the node type mapping file
+mapping_df = pd.read_csv("path/to/your/label_remap_curated.csv")
 
 df_kg["source type original"] = df_kg["source type"].copy()
 df_kg["target type original"] = df_kg["target type"].copy()
@@ -35,18 +36,26 @@ target_nodes.columns = ['name', 'node_type', 'extracted_definition','generated_d
 nodes = pd.concat([source_nodes, target_nodes])
 
 
-# put id column as the first column# generate a unique id for each node based on the node_name and node_type
+# put id column as the first column
+# generate a unique id for each node based on the node_name and node_type
 nodes['id'] = nodes['name'] + ' [' + nodes['node_type'] + ']'
 
 nodes = nodes[['id', 'name', 'node_type','extracted_definition','generated_definition']]
 
 nodes.drop_duplicates(subset=['id'], keep='first', inplace=True)
 
-#take a subset of 100 nodes
-#nodes = nodes.sample(100, random_state=42)
-
 # Function to generate embeddings for nodes
 def generate_embeddings(nodes_subset, nodes_file_name, api_key, max_tokens_per_batch=8192):
+    """
+    Generate embeddings for nodes in the knowledge graph and save to a file.
+    Args:
+        nodes_subset (pd.DataFrame): DataFrame containing node data.
+        nodes_file_name (str): File name to save the embeddings.
+        api_key (str): OpenAI API key.
+        max_tokens_per_batch (int): Maximum tokens per batch for API calls.
+    Returns:
+        None
+    """
     openai.api_key = api_key  # Set your OpenAI API key
 
     print("Columns in nodes DataFrame:", nodes_subset.columns)
@@ -72,6 +81,16 @@ def generate_embeddings(nodes_subset, nodes_file_name, api_key, max_tokens_per_b
 
     # Function to batch inputs without exceeding token limits
     def batch_inputs_by_tokens(inputs, metadata, max_tokens_per_batch):
+        """
+        Batch inputs based on token limits.
+        Args:
+            inputs (list): List of input texts.
+            metadata (list): List of metadata dictionaries.
+            max_tokens_per_batch (int): Maximum tokens per batch.
+        Returns:
+            list: List of batches of inputs.
+            list: List of metadata for each batch.
+        """
         batches = []
         batch_metadata = []
         current_batch = []
@@ -129,4 +148,4 @@ def generate_embeddings(nodes_subset, nodes_file_name, api_key, max_tokens_per_b
 
     # Start generation
 
-generate_embeddings(nodes,"all_node_embeddings.parquet","Enter your API key here.")
+generate_embeddings(nodes,"/your/output/filepath/entity_embeddings.parquet","Enter your API key here.")
