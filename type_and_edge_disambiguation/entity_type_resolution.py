@@ -1,16 +1,15 @@
 import os
-import json
-import time
+
 from datetime import datetime
 
 import pandas as pd
 import numpy as np
-import tiktoken
+
 from openai import OpenAI
 
 
 
-with open("/home/mads/connectome/data/api_key.txt", "r") as f:
+with open("path/to/api_key.txt", "r") as f:
     api_key = f.read()
 
 def get_embedding_from_openai(text, model="text-embedding-ada-002"):
@@ -78,9 +77,9 @@ def get_top_10_similar_nodes(node_embedding, embedding_map_df):
 #def make_user_promts(row):
 #    return f'Input type: {row["id"]};  Top 10 similar types: {row["top_10_nodes"]}'
 print("loading embedding_map_df")
-embedding_map_df = pd.read_parquet("/home/mads/connectome/data/embeddings/type_embeddings/output/type_embeddings_20250311_151131.parquet")
+embedding_map_df = pd.read_parquet("path/to/parquet") # type_embeddings_20250311_151131.parquet
 embedding_map_df.columns = ["id", "embedding"]
-#define reference set as the top 1000 nodes by count
+#define reference set as the top 30 nodes by count
 reference_set = embedding_map_df["id"].head(30).tolist() # this gets the top 30 most common entity types
 reference_df = embedding_map_df[embedding_map_df["id"].isin(reference_set)]
 
@@ -173,10 +172,10 @@ for index, row in tqdm(query_df.iterrows()):
     print(f"querying {row['id']}")
     print(f"length of reference_df: {len(reference_df)}")
     query_embedding = row["embedding"]
-    query_index = index
-    top_10_nodes = get_top_10_similar_nodes(query_embedding)
+    query_frequency_rank = index
+    top_10_closest_node_types = get_top_10_similar_nodes(query_embedding)
     
-    input_prompt = f'Input type: {row["id"]}; Query index: {query_index};  Top 10 similar types: {top_10_nodes}'
+    input_prompt = f'Input type: {row["id"]}; Query index: {query_frequency_rank};  Top 10 similar types: {top_10_closest_node_types}'
     response = get_o3_mini_completion_from_openai(system_prompt, input_prompt, api_key)
     response = eval(response)["map"]
     
@@ -190,7 +189,7 @@ for index, row in tqdm(query_df.iterrows()):
             pd.DataFrame({"id": row["id"], "embedding": [query_embedding]})
         ], ignore_index=True)
         reference_df.reset_index(drop=True, inplace=True)
-        reference_df.to_csv("/home/mads/connectome/data/embeddings/type_embeddings/results/reference_df.csv", index=False)
+        reference_df.to_csv("path/to/reference_df.csv", index=False)
     
     # Save after each iteration to preserve progress
     mapping_df.to_csv(mapping_file, index=False)
@@ -240,7 +239,7 @@ mapping_df = replace_label("variable pair", "relationship")
 mapping_df = replace_label("chemical shift", "process")
 
 
-nodes_df = pd.read_csv("/home/mads/connectome/stats/nodes.csv")
+nodes_df = pd.read_csv("path/to/nodes.csv")
 # in nodes_df map the :LABEL column with the label_remap_df parent_node column
 
 nodes_df["remapped_label"] = nodes_df[":LABEL"].map(mapping_df.set_index("id")["parent_node"])
@@ -252,7 +251,7 @@ nodes_df.loc[mask, "remapped_label"].unique()
 nodes_df.loc[mask, ":LABEL"].unique().shape
 
 mapping_df.loc[mapping_df["id"].isin(nodes_df.loc[mask, ":LABEL"].unique()), "parent_node"] = "other"
-mapping_df.to_csv("/home/mads/connectome/data/embeddings/type_embeddings/results/v2/label_remap_curated.csv", index=False)
+mapping_df.to_csv("path/to/label_remap_curated.csv", index=False)
 
 
 

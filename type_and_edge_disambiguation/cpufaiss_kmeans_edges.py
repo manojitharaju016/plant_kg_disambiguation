@@ -123,51 +123,43 @@ def multisect_kmeans(
 
     return pd.DataFrame(rows), total_inertia
 
-def parse_args():
-    """Parse command line arguments."""
-    import argparse
-    parser = argparse.ArgumentParser(description='Run multisecting K-means clustering with elbow analysis')
-    parser.add_argument('--embeddings_path', type=str, required=True,
-                       help='Path to the embeddings parquet file')
-    parser.add_argument('--output_path', type=str, required=True,
-                       help='Directory path for output files')
-    parser.add_argument('--max_cluster_size', type=int, default=30,
-                       help='Maximum size of final clusters')
-    parser.add_argument('--min_k', type=int, default=2,
-                       help='Minimum k value for elbow analysis')
-    parser.add_argument('--max_k', type=int, default=21,
-                       help='Maximum k value for elbow analysis')
-    parser.add_argument('--max_iter', type=int, default=100,
-                       help='Maximum iterations for k-means')
-    parser.add_argument('--random_state', type=int, default=42,
-                       help='Random seed for reproducibility')
-    return parser.parse_args()
 
 def main():
     """Main function to run the clustering analysis."""
-    args = parse_args()
-    
+        
+
+    embeddings_path = "path/to/embeddings.parquet"
+    output_path = "path/to/output"
+    max_cluster_size = 30
+    min_k = 2
+    max_k = 21
+    max_iter = 100
+    random_state = 42
     # Create output directory if it doesn't exist
-    os.makedirs(args.output_path, exist_ok=True)
+    os.makedirs(output_path, exist_ok=True)
+    
+    
+
+
     
     # Load embeddings
-    print(f"Loading embeddings from {args.embeddings_path}")
-    df_all_embeddings = pd.read_parquet(args.embeddings_path)
+    print(f"Loading embeddings from {embeddings_path}")
+    df_all_embeddings = pd.read_parquet(embeddings_path)
     embeddings = np.array(df_all_embeddings['embedding'].tolist(), dtype='float32')
     print("Embeddings shape:", embeddings.shape)
 
     # Initialize wandb once at the start
     wandb.init(
         project="kmeans_clustering",
-        name=f"multisect_kmeans_sec_all_cpu_max_clust_{args.max_cluster_size}",
+        name=f"multisect_kmeans_sec_all_cpu_max_clust_{max_cluster_size}",
     )
 
     try:
         # Elbow curve analysis
-        k_values = range(args.min_k, args.max_k)
+        k_values = range(min_k, max_k)
 
         # Load previous results if available
-        results_path = os.path.join(args.output_path, "elbow_analysis_results.csv")
+        results_path = os.path.join(output_path, "elbow_analysis_results.csv")
         if os.path.exists(results_path):
             results_df = pd.read_csv(results_path)
             completed_k_values = set(results_df['k_split'].tolist())
@@ -195,10 +187,10 @@ def main():
             df_clusters, inertia = multisect_kmeans(
                 embeddings=embeddings,
                 df_all_embeddings=df_all_embeddings,
-                max_cluster_size=args.max_cluster_size,
+                max_cluster_size=max_cluster_size,
                 k_split=k,
-                max_iter=args.max_iter,
-                random_state=args.random_state
+                max_iter=max_iter,
+                random_state=random_state
             )
             
             inertias.append(inertia)
@@ -220,11 +212,11 @@ def main():
             })
             wandb.finish()
             
-            clusters_path = os.path.join(args.output_path, f'edge_clusters_{k}_max_clust_{args.max_cluster_size}.parquet')
+            clusters_path = os.path.join(output_path, f'edge_clusters_{k}_max_clust_{max_cluster_size}.parquet')
             df_clusters.to_parquet(clusters_path, engine='pyarrow', compression='zstd')
 
         # Generate final plots
-        plot_results(results_df, k_values, args.output_path)
+        plot_results(results_df, k_values, output_path)
     
     finally:
         # Ensure wandb run is properly closed
