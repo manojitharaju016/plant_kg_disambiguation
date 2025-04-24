@@ -50,14 +50,31 @@ pip install pandas pyarrow jsonlines
 ```
 
 ## Entity resolution
-### Description of scripts:
-1. generate_entity_embeddings.py
-2. cpufaiss_kmeans_entities.py
-3. o3mini_inference.py
-4. validate_with_o3mini.ipynb
-5. prepare_finetuning_data.ipynb
-6. finetuned_4omini_inference.ipynb
-7. collapse_entities_in_kg.ipynb
+This directory contains scripts for entity resolution in the plant knowledge graph disambiguation pipeline. These scripts help identify and merge duplicate entities.
+## Files Overview
+
+-   **[generate_entity_embeddings.py](generate_entity_embeddings.py):** Creates vector embeddings for entities along with its types and definitions in the knowledge graph. Transforms entity text/attributes into numerical representations for similarity comparison.
+-   **[cpufaiss_kmeans_entities.py](cpufaiss_kmeans_entities.py):** Performs K-means clustering on entity embeddings using the CPU-based FAISS library.
+    Groups potentially similar entities based on their vector representations.
+-   **[o3mini_inference.py](o3mini_inference.py):** Runs inference using the baseline o3-mini model for finegrained sub-clustering.
+-   **[validate_with_o3mini.ipynb](validate_with_o3mini.ipynb):** Validates entity resolution sub-clustering results using the same o3-mini model but with a different set of instructions.
+-   **[prepare_finetuning_data.ipynb](prepare_finetuning_data.ipynb):** Prepares training data for 4o-mini model using o3-mini validated results; here the o3-mini corrected subclusters used as the ground-truth.
+-   **[finetuned_4omini_inference.ipynb](finetuned_4omini_inference.ipynb):** Runs inference with a fine-tuned 4o-mini model to match the o3-mini performance in the sub-clustering task.
+-   **[collapse_entities_in_kg.ipynb](collapse_entities_in_kg.ipynb):** Merges duplicate entities in the knowledge graph based on resolution results.
+    Applies the final entity resolution decisions to create a consolidated knowledge graph.
+
+### Dependencies
+
+-   Python 3.7+
+-   pandas
+-   numpy
+-   FAISS
+-   PyTorch
+-   Jupyter Notebook
+
+### Usage
+
+See individual script documentation for specific usage instructions.
 
 
 
