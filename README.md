@@ -50,7 +50,14 @@ pip install pandas pyarrow jsonlines
 ```
 
 ## Entity resolution
-
+### Description of scripts:
+1. generate_entity_embeddings.py
+2. cpufaiss_kmeans_entities.py
+3. o3mini_inference.py
+4. validate_with_o3mini.ipynb
+5. prepare_finetuning_data.ipynb
+6. finetuned_4omini_inference.ipynb
+7. collapse_entities_in_kg.ipynb
 
 
 
