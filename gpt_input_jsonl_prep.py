@@ -1,7 +1,7 @@
 import pandas as pd
 
 #read the kmeans clusters
-df = pd.read_parquet('/Users/manojitharajula/Documents/PhD/Connectome/Entity_disambiguation/kmeans/multisect_kmeans_all_clusters.parquet',engine='pyarrow')
+df = pd.read_parquet('path/to/kmeans_clusters_file/multisect_kmeans_all_clusters.parquet',engine='pyarrow')
 
 #remove rows where node_ids_in_cluster is only 1 by checking the length of the list
 df = df[df['node_ids_in_cluster'].apply(lambda x: len(x) > 1)]
