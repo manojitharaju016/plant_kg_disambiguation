@@ -50,7 +50,7 @@ pip install pandas pyarrow jsonlines
 ```
 
 ## Entity resolution
-This directory contains scripts for entity resolution in the plant knowledge graph disambiguation pipeline. These scripts help identify and merge duplicate entities.
+This [directory](entity_resolution/) contains scripts for entity resolution in the plant knowledge graph disambiguation pipeline. These scripts help identify and merge duplicate entities.
 ## Files Overview
 
 -   **[generate_entity_embeddings.py](entity_resolution/generate_entity_embeddings.py):** Creates vector embeddings for entities along with its types and definitions in the knowledge graph. Transforms entity text/attributes into numerical representations for similarity comparison.
