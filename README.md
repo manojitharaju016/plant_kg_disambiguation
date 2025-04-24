@@ -49,6 +49,21 @@ This repository provides python scripts **gpt_input_jsonl_prep.py, convert_gpt_j
 pip install pandas pyarrow jsonlines
 ```
 
+## Entity resolution
+
+
+
+
+## Type resolution
+
+
+
+## Relationship resolution
+
+
+
+
+
 ## Clustering Prompts
 
 Below are the prompts used to instruct the clustering process. These include a **system prompt** that outlines strict guidelines and a **user prompt** that provides input examples along with detailed reasoning. Use these as a reference for how the clustering is being carried out.
