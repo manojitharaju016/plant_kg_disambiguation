@@ -19,6 +19,17 @@ This repository provides the source code and associated resources for entity as 
   URL: [https://pypi.org/project/jsonlines/](https://pypi.org/project/jsonlines/)
 ---
 
+
+### Dependencies
+
+-   Python 3.7+
+-   pandas
+-   numpy
+-   FAISS
+-   PyTorch
+-   Jupyter Notebook
+
+
 ## Conda Environment Setup
 
 Below are steps to create and activate a conda environment. We will install some packages using `conda` and the rest (like `openai` and `tiktoken`) using `pip`, since they may not be available on default conda channels.
@@ -45,15 +56,6 @@ This [directory](entity_resolution/) contains scripts for entity resolution in t
 -   **[finetuned_4omini_inference.ipynb](entity_resolution/finetuned_4omini_inference.ipynb):** Runs inference with a fine-tuned 4o-mini model to match the o3-mini performance in the sub-clustering task.
 -   **[collapse_entities_in_kg.ipynb](entity_resolution/collapse_entities_in_kg.ipynb):** Merges duplicate entities in the knowledge graph based on resolution results.
     Applies the final entity resolution decisions to create a consolidated knowledge graph.
-
-### Dependencies
-
--   Python 3.7+
--   pandas
--   numpy
--   FAISS
--   PyTorch
--   Jupyter Notebook
 
 ### Usage
 
