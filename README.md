@@ -6,11 +6,17 @@ This repository provides the source code and associated resources for entity as 
 
 - **Python 3.9+**
 - **OpenAI** (for embedding generation)
-- **pandas** (for data manipulation)
 - **tqdm** (for progress bars)
 - **tiktoken** (for token counting within the OpenAI model)
 - **An active OpenAI API key** (to authenticate requests)
-
+- **csv** (built-in Python library)  
+- **json** (built-in Python library)
+- **pandas** (for data manipulation)
+  URL: [https://pandas.pydata.org/](https://pandas.pydata.org/)
+- **pyarrow**  
+  URL: [https://arrow.apache.org/docs/python/](https://arrow.apache.org/docs/python/)
+- **jsonlines**  
+  URL: [https://pypi.org/project/jsonlines/](https://pypi.org/project/jsonlines/)
 ---
 
 ## Conda Environment Setup
@@ -19,33 +25,12 @@ Below are steps to create and activate a conda environment. We will install some
 
 1. **Create a new environment** (e.g., `embed`):
    ```bash
-   conda create -n embed python=3.9 pandas tqdm
+   conda create -n kg_resolution python=3.9 pandas tqdm
    ```
 2.	**Install required packages**
    ```bash
-    pip install openai tiktoken
+    pip install openai tiktoken openai jsonlines
    ```
-
-## Processing of batchapi input and output
----
-This repository provides python scripts **gpt_input_jsonl_prep.py, convert_gpt_jsonl_tocsv.py** to prepare input to openAI batchapi and also to read the jsonl batch output response and save it in a csv format.
-
-## Requirements
-
-- **Python 3.9+**  
-- **jsonlines**  
-  - [PyPI Link](https://pypi.org/project/jsonlines/)  
-- **csv** (built-in Python library)  
-- **json** (built-in Python library)
-- **pandas**  
-  URL: [https://pandas.pydata.org/](https://pandas.pydata.org/)
-- **pyarrow**  
-  URL: [https://arrow.apache.org/docs/python/](https://arrow.apache.org/docs/python/)
-- **jsonlines**  
-  URL: [https://pypi.org/project/jsonlines/](https://pypi.org/project/jsonlines/)
-```bash
-pip install pandas pyarrow jsonlines
-```
 
 ## Entity resolution
 This [directory](entity_resolution/) contains scripts for entity resolution in the plant knowledge graph disambiguation pipeline. These scripts help identify and merge duplicate entities.
